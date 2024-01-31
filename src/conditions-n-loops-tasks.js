@@ -322,8 +322,47 @@ function getBalanceIndex(arr) {
  *          [10, 9,  8,  7]
  *        ]
  */
-function getSpiralMatrix(/* size */) {
-  throw new Error('Not implemented');
+function getSpiralMatrix(size) {
+  let counter = 1;
+  let startCol = 0;
+  let endCol = size - 1;
+  let startRow = 0;
+  let endRow = size - 1;
+  const matrix = [];
+
+  for (let i = 0; i < size; i += 1) {
+    matrix[i] = [];
+    for (let j = 0; j < size; j += 1) {
+      matrix[i][j] = '';
+    }
+  }
+
+  while (startCol <= endCol && startRow <= endRow) {
+    for (let i = startCol; i <= endCol; i += 1) {
+      matrix[startRow][i] = counter;
+      counter += 1;
+    }
+    startRow += 1;
+
+    for (let j = startRow; j <= endRow; j += 1) {
+      matrix[j][endCol] = counter;
+      counter += 1;
+    }
+    endCol -= 1;
+
+    for (let k = endCol; k >= startCol; k -= 1) {
+      matrix[endRow][k] = counter;
+      counter += 1;
+    }
+    endRow -= 1;
+
+    for (let l = endRow; l >= startRow; l -= 1) {
+      matrix[l][startCol] = counter;
+      counter += 1;
+    }
+    startCol += 1;
+  }
+  return matrix;
 }
 
 /**
@@ -359,8 +398,32 @@ function rotateMatrix(/* matrix */) {
  *  [2, 9, 5, 9]    => [2, 5, 9, 9]
  *  [-2, 9, 5, -3]  => [-3, -2, 5, 9]
  */
-function sortByAsc(/* arr */) {
-  throw new Error('Not implemented');
+function sortByAsc(arr) {
+  const newArr = [];
+  for (let i = 0; i < arr.length; i += 1) {
+    newArr.push(arr[i]);
+  }
+
+  if (arr.length <= 1) return newArr;
+
+  const midInd = Math.floor(arr.length / 2);
+  const midItem = arr[midInd];
+  const min = [];
+  const max = [];
+
+  for (let i = 0; i < arr.length; i += 1) {
+    if (i !== midInd) {
+      if (arr[i] < midItem) min.push(arr[i]);
+      else max.push(arr[i]);
+    }
+  }
+
+  const sortedArr = [...sortByAsc(min), midItem, ...sortByAsc(max)];
+
+  for (let i = 0; i < newArr.length; i += 1) {
+    newArr[i] = sortedArr[i];
+  }
+  return newArr;
 }
 
 /**
@@ -380,8 +443,36 @@ function sortByAsc(/* arr */) {
  *  '012345', 3 => '024135' => '043215' => '031425'
  *  'qwerty', 3 => 'qetwry' => 'qtrewy' => 'qrwtey'
  */
-function shuffleChar(/* str, iterations */) {
-  throw new Error('Not implemented');
+function shuffleChar(str, iterations) {
+  let strEven = '';
+  let strOdd = '';
+  let currentIterations = iterations;
+  let currentStr = str;
+  const initialStr = str;
+  let count = 0;
+  let res = '';
+
+  while (currentIterations) {
+    for (let i = 0; i < currentStr.length; i += 1) {
+      if (i % 2 !== 0) strOdd += currentStr[i];
+      else strEven += currentStr[i];
+    }
+
+    currentIterations -= 1;
+    count += 1;
+
+    res = strEven + strOdd;
+    currentStr = res;
+    strEven = '';
+    strOdd = '';
+
+    if (currentStr < 1) return res;
+    if (initialStr === currentStr) {
+      return shuffleChar(currentStr, currentIterations % count);
+    }
+  }
+
+  return res;
 }
 
 /**
