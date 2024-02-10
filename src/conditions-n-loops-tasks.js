@@ -380,8 +380,23 @@ function getSpiralMatrix(size) {
  *    [7, 8, 9]         [9, 6, 3]
  *  ]                 ]
  */
-function rotateMatrix(/* matrix */) {
-  throw new Error('Not implemented');
+function rotateMatrix(matrix) {
+  const currentMatrix = matrix;
+  const newMatrix = [];
+
+  for (let i = 0; i < matrix.length; i += 1) {
+    const newRow = [];
+    for (let j = 0; j < matrix.length; j += 1) {
+      newRow[j] = matrix[matrix.length - 1 - j][i];
+    }
+    newMatrix[i] = newRow;
+  }
+
+  for (let i = 0; i < newMatrix.length; i += 1) {
+    currentMatrix[i] = newMatrix[i];
+  }
+
+  return matrix;
 }
 
 /**
@@ -398,8 +413,32 @@ function rotateMatrix(/* matrix */) {
  *  [2, 9, 5, 9]    => [2, 5, 9, 9]
  *  [-2, 9, 5, -3]  => [-3, -2, 5, 9]
  */
-function sortByAsc(/* arr */) {
-  throw new Error('Not implemented');
+function sortByAsc(arr) {
+  if (arr.length <= 1) return arr;
+  const currentArr = arr;
+
+  const ind = Math.floor(arr.length / 2);
+  const itemInd = arr[ind];
+  const min = [];
+  const max = [];
+
+  for (let i = 0; i < arr.length; i += 1) {
+    if (i !== ind) {
+      if (arr[i] < itemInd) {
+        min[min.length] = arr[i];
+      } else {
+        max[max.length] = arr[i];
+      }
+    }
+  }
+
+  const sortArr = [...sortByAsc(min), itemInd, ...sortByAsc(max)];
+
+  for (let i = 0; i < sortArr.length; i += 1) {
+    currentArr[i] = sortArr[i];
+  }
+
+  return arr;
 }
 
 /**
@@ -468,8 +507,47 @@ function shuffleChar(str, iterations) {
  * @param {number} number The source number
  * @returns {number} The nearest larger number, or original number if none exists.
  */
-function getNearestBigger(/* number */) {
-  throw new Error('Not implemented');
+function getNearestBigger(number) {
+  const numArr = Array.from(`${number}`, Number);
+
+  const left = [];
+  let swapNum = -1;
+  let swapInd;
+  const right = [];
+
+  for (let i = numArr.length - 1; i >= 0; i -= 1) {
+    if (numArr[i - 1] < numArr[i]) {
+      swapNum = numArr[i - 1];
+      swapInd = i - 1;
+      break;
+    }
+  }
+
+  if (swapInd === -1) return number;
+
+  for (let i = 0; i < numArr.length; i += 1) {
+    if (swapInd > i) {
+      left.push(numArr[i]);
+    } else if (swapInd < i) {
+      right.push(numArr[i]);
+    }
+  }
+
+  let min = right[0];
+  let indMin = 0;
+
+  for (let i = 0; i < right.length; i += 1) {
+    if (right[i] > swapNum && right[i] < min) {
+      min = right[i];
+      indMin = i;
+    }
+  }
+
+  const temp = swapNum;
+  swapNum = min;
+  right[indMin] = temp;
+
+  return Number(left.join('') + swapNum + right.sort((a, b) => a - b).join(''));
 }
 
 module.exports = {
